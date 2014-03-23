@@ -16,13 +16,17 @@ public class Person implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;
-	private String firstname;
-	private String lastname;
-	
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id", unique=true, nullable=false)
+	private Long id;
+	
+	@Column(name="firstname", nullable=false)
+	private String firstname;
+	
+	@Column(name="lastname", nullable=false)
+	private String lastname;
+	
 	public Long getId() {
 		return id;
 	}
@@ -30,7 +34,6 @@ public class Person implements Serializable {
 		this.id = id;
 	}
 	
-	@Column(name="firstname", nullable=false)
 	public String getFirstname() {
 		return firstname;
 	}
@@ -38,7 +41,6 @@ public class Person implements Serializable {
 		this.firstname = firstname;
 	}
 	
-	@Column(name="lastname", nullable=false)
 	public String getLastname() {
 		return lastname;
 	}

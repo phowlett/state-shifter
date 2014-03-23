@@ -11,7 +11,7 @@ import springvaadin.model.Person;
 import springvaadin.repository.PersonRepository;
 
 @RestController
-public class PersonController {
+public class PersonRestController {
 	
 	@Autowired
 	private PersonRepository personRepository;
