@@ -11,22 +11,30 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 
 import org.vaadin.spring.VaadinUI;
+import org.vaadin.teemu.clara.Clara;
+import org.vaadin.teemu.clara.binder.annotation.UiDataSource;
+import org.vaadin.teemu.clara.binder.annotation.UiField;
 
 @VaadinUI
 public class PersonUI extends UI {
 
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	private PersonRepository personRepository;
 	
+	@UiField("personTable")
+    private Table personTable;
+	
 	@Override
 	protected void init(VaadinRequest request) {
-		BeanItemContainer<Person> personBeanItemContainer = new BeanItemContainer<>(Person.class, personRepository.findAll());
-		
-		Table personTable = new Table("Person Table");
-		personTable.setContainerDataSource(personBeanItemContainer);
+		setContent(Clara.create("PersonUI.xml", this));
 		personTable.setVisibleColumns("id", "firstname", "lastname");
-		personTable.setSizeFull();
-		setContent(personTable);
+	}
+	
+	@UiDataSource("personTable")
+	public BeanItemContainer<Person> createPersonDataSource() {
+		return new BeanItemContainer<>(Person.class, personRepository.findAll());		 
 	}
 
 }
