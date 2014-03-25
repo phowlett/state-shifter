@@ -3,7 +3,7 @@
 	<VerticalLayout>
 		<Table id="personTable" selectable="true" immediate="true" sizeFull="" l:expandRatio="1.0"/>
 	</VerticalLayout>
-	<FormLayout margin="true" visible="false" id="editorLayout">
+	<FormLayout margin="true" visible="false" id="personEditor">
         <Button id="submitButton" caption="Submit"/>
     </FormLayout>
 </HorizontalSplitPanel>
