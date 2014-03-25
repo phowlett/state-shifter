@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<VerticalLayout xmlns:l="urn:vaadin:parent">
-	<Table id="personTable" selectable="true" immediate="true" sizeFull="" l:expandRatio="1.0"/>
-</VerticalLayout>
+<HorizontalSplitPanel xmlns:l="urn:vaadin:parent">
+	<VerticalLayout>
+		<Table id="personTable" selectable="true" immediate="true" sizeFull="" l:expandRatio="1.0"/>
+	</VerticalLayout>
+	<FormLayout margin="true" visible="false" id="editorLayout">
+        <Button id="submitButton" caption="Submit"/>
+    </FormLayout>
+</HorizontalSplitPanel>
