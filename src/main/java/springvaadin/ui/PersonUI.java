@@ -10,6 +10,7 @@ import org.vaadin.teemu.clara.binder.annotation.UiHandler;
 import springvaadin.model.Person;
 import springvaadin.repository.PersonRepository;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
@@ -23,6 +24,7 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 
 @VaadinUI
+@Theme("reindeer")
 public class PersonUI extends UI {
 
 	private static final long serialVersionUID = 1L;
