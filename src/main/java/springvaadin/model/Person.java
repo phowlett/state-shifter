@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "person")
@@ -26,6 +26,9 @@ public class Person implements Serializable {
 	
 	@Column(name="lastname", nullable=false)
 	private String lastname;
+	
+	@OneToOne
+	private Pizza pizza;
 	
 	public Long getId() {
 		return id;
@@ -48,5 +51,11 @@ public class Person implements Serializable {
 		this.lastname = lastname;
 	}
 	
+	public Pizza getPizza() {
+		return pizza;
+	}
+	public void setPizza(Pizza pizza) {
+		this.pizza = pizza;
+	}
 	
 }

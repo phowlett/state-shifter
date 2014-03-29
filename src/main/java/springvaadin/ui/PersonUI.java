@@ -8,7 +8,9 @@ import org.vaadin.teemu.clara.binder.annotation.UiField;
 import org.vaadin.teemu.clara.binder.annotation.UiHandler;
 
 import springvaadin.model.Person;
+import springvaadin.model.Pizza;
 import springvaadin.repository.PersonRepository;
+import springvaadin.repository.PizzaRepository;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -17,7 +19,9 @@ import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
@@ -32,6 +36,9 @@ public class PersonUI extends UI {
 	@Autowired
 	private PersonRepository personRepository;
 	
+	@Autowired
+	private PizzaRepository pizzaRepository;
+	
 	@UiField("personTable")
     private Table personTable;
 	
@@ -44,10 +51,18 @@ public class PersonUI extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		setContent(Clara.create("PersonUI.xml", this));
-		personTable.setVisibleColumns("id", "firstname", "lastname");
+		personTable.setVisibleColumns("id", "firstname", "lastname", "pizza");
 		
 		personEditor.addComponent(personFieldGroup.buildAndBind("First Name", "firstname"), 0);
 		personEditor.addComponent(personFieldGroup.buildAndBind("Last Name", "lastname"), 1);
+		
+		ComboBox selectPizza = new ComboBox("Pizza", new BeanItemContainer<>(Pizza.class, pizzaRepository.findAll()));
+		selectPizza.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+		selectPizza.setItemCaptionPropertyId("description");
+		
+		personFieldGroup.bind(selectPizza, "pizza");
+		personEditor.addComponent(selectPizza, 2);
+		
         personFieldGroup.setBuffered(true);
 	}
 	
