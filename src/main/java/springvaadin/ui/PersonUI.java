@@ -46,14 +46,18 @@ public class PersonUI extends UI {
 		setContent(Clara.create("PersonUI.xml", this));
 		personTable.setVisibleColumns("id", "firstname", "lastname");
 		
-		int index = 0;
-        for (String fieldName : fieldNames) {
-            TextField field = new TextField(fieldName);
-            editorLayout.addComponent(field, index++);
-            field.setWidth("100%");
-            binder.bind(field, fieldName);
+		for (Object propertyId : binder.getUnboundPropertyIds()) {
+			editorLayout.addComponent(binder.buildAndBind(propertyId));
         }
-        binder.setBuffered(true);
+//		
+//		int index = 0;
+//        for (String fieldName : fieldNames) {
+//            TextField field = new TextField(fieldName);
+//            editorLayout.addComponent(field, index++);
+//            field.setWidth("100%");
+//            binder.bind(field, fieldName);
+//        }
+//        binder.setBuffered(true);
 	}
 	
 	@UiDataSource("personTable")
