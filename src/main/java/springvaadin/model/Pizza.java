@@ -36,9 +36,14 @@ public class Pizza implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	@Override
 	public String toString() {
 		return description;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		return obj != null && id == ((Pizza)obj).getId();
 	}
 	
 }
