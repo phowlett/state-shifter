@@ -23,6 +23,7 @@ import com.vaadin.addon.charts.model.Configuration;
 import com.vaadin.addon.charts.model.DataSeries;
 import com.vaadin.addon.charts.model.DataSeriesItem;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -39,6 +40,7 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 
 @VaadinUI
+@Title("Pizza")
 @Theme("reindeer")
 public class PersonUI extends UI {
 
@@ -85,7 +87,8 @@ public class PersonUI extends UI {
 		
 		// Combo box for pizza selection, backed by pizza repository
 		ComboBox selectPizza = new ComboBox("Pizza", new BeanItemContainer<>(Pizza.class, pizzaRepository.findAll()));
-		selectPizza.setItemCaptionMode(ItemCaptionMode.ITEM);
+		selectPizza.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+		selectPizza.setItemCaptionPropertyId("description");
 		personFieldGroup.bind(selectPizza, "pizza");
 		personEditor.addComponent(selectPizza, 2);
 		// Buffered mode, so person will not be updated until submit and commit
