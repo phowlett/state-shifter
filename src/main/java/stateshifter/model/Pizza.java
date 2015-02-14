@@ -1,4 +1,4 @@
-package springvaadin.model;
+package stateshifter.model;
 
 import java.io.Serializable;
 

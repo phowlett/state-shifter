@@ -1,27 +1,17 @@
-package springvaadin.ui;
-
-import java.util.Comparator;
-import java.util.Map;
-import java.util.stream.Collectors;
+package stateshifter.ui;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.VaadinUI;
+import org.vaadin.spring.annotation.VaadinUI;
 import org.vaadin.teemu.clara.Clara;
 import org.vaadin.teemu.clara.binder.annotation.UiDataSource;
 import org.vaadin.teemu.clara.binder.annotation.UiField;
 import org.vaadin.teemu.clara.binder.annotation.UiHandler;
 
-import springvaadin.model.Person;
-import springvaadin.model.Pizza;
-import springvaadin.repository.PersonRepository;
-import springvaadin.repository.PizzaRepository;
+import stateshifter.model.Person;
+import stateshifter.model.Pizza;
+import stateshifter.repository.PersonRepository;
+import stateshifter.repository.PizzaRepository;
 
-import com.vaadin.addon.charts.Chart;
-import com.vaadin.addon.charts.model.ChartModel;
-import com.vaadin.addon.charts.model.ChartType;
-import com.vaadin.addon.charts.model.Configuration;
-import com.vaadin.addon.charts.model.DataSeries;
-import com.vaadin.addon.charts.model.DataSeriesItem;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.data.Item;
@@ -58,12 +48,8 @@ public class PersonUI extends UI {
 	@UiField("personEditor")
     private FormLayout personEditor;
 	
-	@UiField("chart")
-	private Chart chart;
-	
 	private BeanFieldGroup<Person> personFieldGroup;
 	private BeanItemContainer<Person> personContainer;
-	private Configuration configuration;
 	
 	/* (non-Javadoc)
 	 * @see com.vaadin.ui.UI#init(com.vaadin.server.VaadinRequest)
@@ -73,7 +59,6 @@ public class PersonUI extends UI {
 		setContent(Clara.create("PersonUI.xml", this));
 		personTable.setVisibleColumns("firstname", "lastname", "pizza");
 		initEditor();
-        initChart();
 	}
 
 	/**
@@ -93,35 +78,6 @@ public class PersonUI extends UI {
 		personEditor.addComponent(selectPizza, 2);
 		// Buffered mode, so person will not be updated until submit and commit
         personFieldGroup.setBuffered(true);
-	}
-
-	/**
-	 * Initialise the pie chart
-	 */
-	private void initChart() {
-		configuration = chart.getConfiguration();
-        configuration.setTitle("Pizza");
-        configuration.setChart(new ChartModel(configuration, ChartType.PIE));
-        updateChartData();
-	}
-	
-	/**
-	 * update the chart data based on the count of each pizza choice
-	 */
-	private void updateChartData() {
-		// Data series for the pizza pie chart
-		DataSeries series = new DataSeries("Pizza");		
-		// Group and count the pizzas
-        Map<Pizza, Long> countByPizza = personRepository.findAll().stream()
-        	.collect(Collectors.groupingBy(Person::getPizza, Collectors.counting()));
-        // Map the pizza counts to a data series for the pie chart
-        countByPizza.entrySet().stream()
-        	.map(e -> new DataSeriesItem(e.getKey().toString(), e.getValue()))
-        	.sorted(Comparator.comparing(d -> d.getName()))
-        	.forEach(d -> series.add(d));
-        // Set the chart series and redraw
-        configuration.setSeries(series);
-        chart.drawChart();
 	}
 	
 	/**
@@ -187,7 +143,6 @@ public class PersonUI extends UI {
 				personRepository.saveAndFlush(personFieldGroup.getItemDataSource().getBean());
 				Notification.show("Saved");
 				updateTableData();
-				updateChartData();
 			} catch (CommitException e) {
 				Notification.show("Commit error");
 			}

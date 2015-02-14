@@ -1,4 +1,4 @@
-spring-vaadin
+state-shifter
 =============
 
-Spring Boot with Vaadin integration
+State Shifter - with Spring Boot, Vaadin and Commons SCXML

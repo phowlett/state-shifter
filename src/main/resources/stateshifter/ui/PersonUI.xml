@@ -5,8 +5,7 @@
 	        <Button id="addButton" caption="Add" />
 	    </HorizontalLayout>
 	    <VerticalSplitPanel splitPosition="30"  sizeFull="" l:expandRatio="1.0">
-			<Table id="personTable" selectable="true" immediate="true" sizeFull=""/>
-			<c:Chart id="chart" sizeFull=""/>		
+			<Table id="personTable" selectable="true" immediate="true" sizeFull=""/>		
 		</VerticalSplitPanel>
 	</VerticalLayout>
 	<FormLayout margin="true" visible="false" id="personEditor">
