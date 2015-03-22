@@ -1,0 +1,14 @@
+// Modify the base color of the theme
+//$v-background-color: blue;
+
+
+// Import valo after setting the parameters
+@import "../valo/valo";
+
+
+.stateshifter {
+  @include valo;
+
+
+  // Your theme's rules go here
+}

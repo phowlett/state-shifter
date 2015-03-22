@@ -33,8 +33,9 @@ import com.vaadin.ui.declarative.Design;
 
 @SpringUI
 @Title("Pizza")
-@Theme("valo")
+@Theme("stateshifter")
 public class PersonUI extends UI {
+	
 
 	private static final long serialVersionUID = 1L;
 	
@@ -50,7 +51,7 @@ public class PersonUI extends UI {
 	
 	@DesignRoot
 	@SuppressWarnings("serial")
-	public class PersonDesign extends HorizontalSplitPanel {
+	protected class PersonDesign extends HorizontalSplitPanel {
 		VerticalLayout verticalLayout;
 		Button addButton;
 		Table personTable;
@@ -82,6 +83,7 @@ public class PersonUI extends UI {
 		design.personTable.setSelectable(true);
 		design.personTable.addValueChangeListener(event -> onPersonSelected(event));
 		design.personTable.setVisibleColumns("firstname", "lastname", "pizza");
+		design.personTable.setColumnHeaders("First Name", "Last Name", "Pizza");
 		design.addButton.addClickListener(event -> onAddPerson(event));
 	}
 
