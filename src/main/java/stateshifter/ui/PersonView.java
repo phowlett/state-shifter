@@ -1,5 +1,7 @@
 package stateshifter.ui;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import stateshifter.model.Person;
@@ -8,16 +10,15 @@ import stateshifter.repository.PersonRepository;
 import stateshifter.repository.PizzaRepository;
 
 import com.vaadin.annotations.DesignRoot;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Title;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -27,17 +28,15 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.declarative.Design;
 
-@SpringUI
-@Title("Pizza")
-@Theme("stateshifter")
-public class PersonUI extends UI {
+@DesignRoot
+@SuppressWarnings("serial")
+@SpringView(name = PersonView.VIEW_NAME)
+public class PersonView extends HorizontalSplitPanel implements View {
 	
-
-	private static final long serialVersionUID = 1L;
+	public static final String VIEW_NAME = "person";
 	
 	@Autowired
 	private PersonRepository personRepository;
@@ -47,29 +46,18 @@ public class PersonUI extends UI {
 		
 	private BeanFieldGroup<Person> personFieldGroup;
 	private BeanItemContainer<Person> personContainer;
-	protected PersonDesign design;
+	protected VerticalLayout verticalLayout;
+	protected Button addButton;
+	protected Table personTable;
+	protected Button submitButton;
+	protected FormLayout personEditor;
+	protected TextField firstname;
+	protected TextField lastname;
+	protected ComboBox selectPizza;
 	
-	@DesignRoot
-	@SuppressWarnings("serial")
-	protected class PersonDesign extends HorizontalSplitPanel {
-		VerticalLayout verticalLayout;
-		Button addButton;
-		Table personTable;
-		Button submitButton;
-		FormLayout personEditor;
-		TextField firstname;
-		TextField lastname;
-		ComboBox selectPizza;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.vaadin.ui.UI#init(com.vaadin.server.VaadinRequest)
-	 */
-	@Override
-	protected void init(VaadinRequest request) {
-		design = new PersonDesign();
-		Design.read(design);
-		setContent(design);		
+	@PostConstruct
+    void init() {
+		Design.read(this);
 		initTable();
 		initEditor();
 	}
@@ -79,12 +67,12 @@ public class PersonUI extends UI {
 	 */
 	private void initTable() {
 		personContainer = new BeanItemContainer<>(Person.class, personRepository.findAll());
-		design.personTable.setContainerDataSource(personContainer);
-		design.personTable.setSelectable(true);
-		design.personTable.addValueChangeListener(event -> onPersonSelected(event));
-		design.personTable.setVisibleColumns("firstname", "lastname", "pizza");
-		design.personTable.setColumnHeaders("First Name", "Last Name", "Pizza");
-		design.addButton.addClickListener(event -> onAddPerson(event));
+		personTable.setContainerDataSource(personContainer);
+		personTable.setSelectable(true);
+		personTable.addValueChangeListener(event -> onPersonSelected(event));
+		personTable.setVisibleColumns("firstname", "lastname", "pizza");
+		personTable.setColumnHeaders("First Name", "Last Name", "Pizza");
+		addButton.addClickListener(event -> onAddPerson(event));
 	}
 
 	/**
@@ -93,18 +81,18 @@ public class PersonUI extends UI {
 	private void initEditor() {
 		// bind text fields for name
 		personFieldGroup = new BeanFieldGroup<Person>(Person.class);
-		personFieldGroup.bind(design.firstname, "firstname");
-		personFieldGroup.bind(design.lastname, "lastname");
+		personFieldGroup.bind(firstname, "firstname");
+		personFieldGroup.bind(lastname, "lastname");
 		
 		// Combo box for pizza selection, backed by pizza repository
-		design.selectPizza.setContainerDataSource(new BeanItemContainer<>(Pizza.class, pizzaRepository.findAll()));
-		design.selectPizza.setItemCaptionMode(ItemCaptionMode.PROPERTY);
-		design.selectPizza.setItemCaptionPropertyId("description");
-		personFieldGroup.bind(design.selectPizza, "pizza");
+		selectPizza.setContainerDataSource(new BeanItemContainer<>(Pizza.class, pizzaRepository.findAll()));
+		selectPizza.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+		selectPizza.setItemCaptionPropertyId("description");
+		personFieldGroup.bind(selectPizza, "pizza");
 		
 		// Buffered mode, so person will not be updated until submit and commit
         personFieldGroup.setBuffered(true);
-		design.submitButton.addClickListener(event -> onSubmit(event));
+		submitButton.addClickListener(event -> onSubmit(event));
 	}
 	
 	/**
@@ -121,7 +109,7 @@ public class PersonUI extends UI {
 	 */
 	private void editPerson(Item personItem) {
 		personFieldGroup.setItemDataSource(personItem);
-		design.personEditor.setVisible(personItem != null);
+		personEditor.setVisible(personItem != null);
 	}
 	
 	
@@ -130,9 +118,9 @@ public class PersonUI extends UI {
 	 * @param event
 	 */
 	public void onPersonSelected(ValueChangeEvent event) {
-        Object personId = design.personTable.getValue();
+        Object personId = personTable.getValue();
         if (personId != null) {
-        	editPerson(design.personTable.getItem(personId));
+        	editPerson(personTable.getItem(personId));
         }        
     }
 	
@@ -162,6 +150,11 @@ public class PersonUI extends UI {
 				Notification.show("Commit error");
 			}
 		}
+	}
+
+	@Override
+	public void enter(ViewChangeEvent event) {
+		// the view is constructed in the init() method()
 	}
 
 }

@@ -68,7 +68,7 @@
 	</dependencies>
 	
 	<properties>
-	    <vaadin.version>7.4.0</vaadin.version>
+	    <vaadin.version>7.4.2</vaadin.version>
 	    <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<start-class>stateshifter.Application</start-class>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
