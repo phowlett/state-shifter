@@ -10,11 +10,9 @@ import stateshifter.repository.PersonRepository;
 import stateshifter.repository.PizzaRepository;
 
 import com.vaadin.annotations.DesignRoot;
-import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -79,6 +77,8 @@ public class PersonView extends HorizontalSplitPanel implements View {
 	 * Initialise the person editor and form fields
 	 */
 	private void initEditor() {
+		personEditor.setVisible(false);
+		
 		// bind text fields for name
 		personFieldGroup = new BeanFieldGroup<Person>(Person.class);
 		personFieldGroup.bind(firstname, "firstname");
@@ -105,11 +105,11 @@ public class PersonView extends HorizontalSplitPanel implements View {
 	
 	/**
 	 * Edit a person by binding the person item to the editor field group
-	 * @param personItem
+	 * @param person
 	 */
-	private void editPerson(Item personItem) {
-		personFieldGroup.setItemDataSource(personItem);
-		personEditor.setVisible(personItem != null);
+	private void editPerson(Person person) {
+		personFieldGroup.setItemDataSource(person);
+		personEditor.setVisible(person != null);
 	}
 	
 	
@@ -118,9 +118,9 @@ public class PersonView extends HorizontalSplitPanel implements View {
 	 * @param event
 	 */
 	public void onPersonSelected(ValueChangeEvent event) {
-        Object personId = personTable.getValue();
-        if (personId != null) {
-        	editPerson(personTable.getItem(personId));
+        Person person = (Person)personTable.getValue();
+        if (person != null) {
+        	editPerson(person);
         }        
     }
 	
@@ -129,8 +129,7 @@ public class PersonView extends HorizontalSplitPanel implements View {
 	 * @param event
 	 */
 	public void onAddPerson(ClickEvent event) {
-        BeanItem<Person> personBean = new BeanItem<Person>(new Person("New", "Person"));
-        editPerson(personBean);        
+        editPerson(new Person("New", "Person"));        
     }
 	
 	/**
@@ -143,11 +142,13 @@ public class PersonView extends HorizontalSplitPanel implements View {
 		} else {
 			try {
 				personFieldGroup.commit();
-				personRepository.saveAndFlush(personFieldGroup.getItemDataSource().getBean());
+				personRepository.save(personFieldGroup.getItemDataSource().getBean());				
 				Notification.show("Saved");
 				updateTableData();
 			} catch (CommitException e) {
 				Notification.show("Commit error");
+			} finally {
+				personEditor.setVisible(false);
 			}
 		}
 	}

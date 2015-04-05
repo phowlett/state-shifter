@@ -1,32 +1,20 @@
 package stateshifter.model;
 
-import java.io.Serializable;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "pizza")
-public class Pizza implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+@Document
+public class Pizza {
 	
 	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="id", unique=true, nullable=false)
-	private Long id;
+	private String id;
 	
-	@Column(name="description", nullable=false)
 	private String description;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -43,7 +31,7 @@ public class Pizza implements Serializable {
 	}
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && id == ((Pizza)obj).getId();
+		return obj != null && id.equals(((Pizza)obj).getId());
 	}
 	
 }
