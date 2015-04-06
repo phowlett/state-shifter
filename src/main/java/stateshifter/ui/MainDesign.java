@@ -12,12 +12,14 @@ public class MainDesign extends HorizontalLayout {
 	protected Panel viewPanel;
 	protected Button mainButton;
 	protected Button personButton;
+	protected Button bugButton;
 	
 	public MainDesign() {
 		Design.read(this);
 		
 		mainButton.addClickListener(event -> getUI().getNavigator().navigateTo(DefaultView.VIEW_NAME));
         personButton.addClickListener(event -> getUI().getNavigator().navigateTo(PersonView.VIEW_NAME));
+        bugButton.addClickListener(event -> getUI().getNavigator().navigateTo(BugView.VIEW_NAME));
 	}
 	
 	public Panel getViewPanel() {

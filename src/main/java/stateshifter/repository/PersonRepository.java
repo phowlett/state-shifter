@@ -9,7 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import stateshifter.model.Person;
 
 @RepositoryRestResource(path="people")
-public interface PersonRepository extends MongoRepository<Person, Long>{
+public interface PersonRepository extends MongoRepository<Person, String>{
 	
 	Collection<Person> findByLastname(@Param("lastname") String lastname);
 

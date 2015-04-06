@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <v-horizontal-split-panel _id="horizontalSplitPanel"> 
-  <v-vertical-layout size-auto="true" _id="verticalLayout" width-auto spacing margin> 
-    <v-button _id="addButton">Add</v-button> 
-    <v-table id="personTable" _id="personTable" /> 
+  <v-vertical-layout size-auto="true" width-auto spacing margin>
+  	<v-horizontal-layout width-auto spacing> 
+      <v-button _id="addButton">Add</v-button>
+      <v-button _id="deleteButton">Delete</v-button>
+    </v-horizontal-layout>  
+    <v-table _id="personTable" /> 
   </v-vertical-layout> 
-  <v-form-layout _id="personEditor" margin> 
+  <v-form-layout _id="personForm" margin> 
     <v-text-field _id="firstname" caption="First Name" /> 
     <v-text-field _id="lastname" caption="Last Name" /> 
     <v-combo-box _id="selectPizza" caption="Pizza" /> 

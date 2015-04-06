@@ -1,4 +1,4 @@
 state-shifter
 =============
 
-State Shifter - with Spring Boot, Vaadin and Commons SCXML
+State Shifter - with Spring Boot, Vaadin, MongoDB and Commons SCXML
